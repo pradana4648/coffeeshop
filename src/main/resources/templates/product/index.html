@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"
+    />
+    <title>Our Products | ST Coffeeshop</title>
+  </head>
+  <body class="container">
+    <div>
+      <a href="/">
+        <h1>Special Team Coffeeshop</h1>
+      </a>
+      <p class="lead">We sell top quality coffee from Java</p>
+    </div>
+
+    <div th:each="product : ${products}">
+      <p th:text="${product.name}"></p>
+      <p th:text="${product.description}"></p>
+      <img
+        th:src="'data:' + ${product.mimeType} + ';base64, ' + ${product.image}"
+        th:alt="${product.name}"
+      />
+      <p></p>
+    </div>
+
+    <a class="btn btn-primary" th:href="@{/product/add}" role="button"
+      >Add Product</a
+    >
+    <a class="btn btn-danger" href="" role="button">Edit Product</a>
+    <a class="btn btn-warning" href="" role="button">Delete Product</a>
+
+    <!-- Webjars package -->
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/test.js}"></script>
+  </body>
+</html>
