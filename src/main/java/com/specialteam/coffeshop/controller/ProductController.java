@@ -53,7 +53,7 @@ public class ProductController implements ErrorController {
      * @param model
      * @return
      */
-    @GetMapping(value = "/product", produces = { MediaType.TEXT_HTML_VALUE })
+    @GetMapping(value = "/products", produces = { MediaType.TEXT_HTML_VALUE })
     public ModelAndView productView(ModelMap model) {
         model.addAttribute("products", service.getProducts());
         return new ModelAndView("product/index.html", model);
@@ -66,7 +66,7 @@ public class ProductController implements ErrorController {
      * @param requestType
      * @return
      */
-    @GetMapping(value = "/product/{requestType}", produces = {
+    @GetMapping(value = "/products/{requestType}", produces = {
             MediaType.TEXT_HTML_VALUE })
     public ModelAndView productView(ModelMap model,
             @PathVariable(name = "requestType") String requestType) {
@@ -83,14 +83,14 @@ public class ProductController implements ErrorController {
         }
     }
 
-    @PostMapping(value = "/api/v1/product/add", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/api/v1/products/add", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @ResponseBody
     public ResponseEntity<Map<String, Object>> addProduct(@RequestParam("productRequest") String request,
             @RequestParam(value = "image", required = false) MultipartFile file) throws Exception {
         return service.addProduct(request, file);
     }
 
-    @GetMapping(value = "/api/v1/product")
+    @GetMapping(value = "/api/v1/products")
     @ResponseBody
     public ResponseEntity<List<ProductResponse>> getProducts() {
         return service.getProductsResponse();

@@ -1,12 +1,13 @@
 package com.specialteam.coffeshop.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,14 +16,14 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class WebSecurityConfig {
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/webjars/**", "/static/**");
-    }
 
     @Bean(name = "filterChain")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf().ignoringRequestMatchers("/api/v1/register");
+        http.authorizeHttpRequests().requestMatchers("/", "/products", "/api/v1/register").permitAll();
+        http.authorizeHttpRequests().requestMatchers("/static/**", "/webjars/**").permitAll();
+        http.authorizeHttpRequests().anyRequest().authenticated().and().formLogin(withDefaults())
+                .httpBasic(withDefaults());
         return http.build();
     }
 
