@@ -29,6 +29,7 @@ public class ProductService {
     public ResponseEntity<ProductResponse<List<ProductDto>>> getProducts() {
         List<ProductDto> results = repository.findAll().stream().map(product -> {
             ProductDto dto = new ProductDto();
+            dto.setId(product.getId());
             dto.setName(product.getName());
             dto.setDescription(product.getDescription());
             dto.setQuantity(product.getQuantity());
@@ -46,9 +47,9 @@ public class ProductService {
         try {
             ProductRequest request = mapper.readValue(productJsonString, ProductRequest.class);
 
-            Optional<Product> productName = repository.findByName(request.getName());
+            Optional<Product> productByName = repository.findByName(request.getName());
 
-            if (productName.isPresent()) {
+            if (productByName.isPresent()) {
                 var result = new HashMap<>();
                 result.put("message", String.format("product with name %s is exist", request.getName()));
                 return ProductResponse.response(true, result, HttpStatus.OK);
@@ -76,6 +77,27 @@ public class ProductService {
             }
         } catch (Exception e) {
             throw e;
+        }
+
+    }
+
+    public ResponseEntity<?> editProductAvailbility(String id) {
+        Optional<Product> productById = repository.findById(id);
+
+        if (!productById.isPresent()) {
+            var result = new HashMap<>();
+            result.put("message", String.format("product with id %s not exist", id));
+            return ProductResponse.response(true, result, HttpStatus.OK);
+        } else {
+            var result = new HashMap<>();
+            result.put("message", String.format("success update availbility product id %s", id));
+            Product product = productById.get();
+
+            product.setIsAvailable(Boolean.TRUE);
+
+            repository.save(product);
+
+            return ProductResponse.response(false, result, HttpStatus.OK);
         }
 
     }
