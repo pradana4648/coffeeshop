@@ -1,12 +1,9 @@
 package com.specialteam.coffeshop.service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +26,9 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public ResponseEntity<Map<String, Object>> addProduct(String request, MultipartFile file) throws Exception {
+    public ResponseEntity<ProductResponse<Product>> addProduct(String request, MultipartFile file) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> body;
+        ProductResponse<Product> response;
 
         try {
             ProductRequest productRequest = mapper.readValue(request, ProductRequest.class);
@@ -43,12 +40,13 @@ public class ProductService {
             entity.setQuantity(1);
             entity.setImage(imageToBytes(file));
             repository.save(entity);
-            body = new HashMap<>();
-            body.put("status", 1);
-            body.put("error", null);
-            body.put("data", null);
-            body.put("message", null);
-            return ResponseEntity.ok(body);
+
+            response = new ProductResponse<>();
+            response.setError(false);
+            response.setResults(entity);
+            response.setStatus("success");
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;
@@ -56,7 +54,6 @@ public class ProductService {
     }
 
     private ProductImage imageToBytes(MultipartFile file) {
-
         ProductImage image = new ProductImage();
         try {
             image.setFilename(file.getOriginalFilename());
@@ -69,35 +66,14 @@ public class ProductService {
         return image;
     }
 
-    public ResponseEntity<List<ProductResponse>> getProductsResponse() {
-        List<ProductResponse> results = repository.findAll().stream().map(value -> {
-            ProductResponse response = new ProductResponse();
-            response.setName(value.getName());
-            response.setDescription(value.getDescription());
-            response.setPrice(value.getPrice());
+    public ResponseEntity<ProductResponse<List<Product>>> getProductsResponse() {
+        ProductResponse<List<Product>> response;
 
-            String base64Image = Base64.encodeBase64String(value.getImage().getContent().getData());
-            response.setImage(base64Image);
-            response.setMimeType(value.getImage().getMimeType());
-            return response;
-        }).toList();
-        return ResponseEntity.ok().body(results);
-
-    }
-
-    public List<ProductResponse> getProducts() {
-        List<ProductResponse> results = repository.findAll().stream().map(value -> {
-            ProductResponse response = new ProductResponse();
-            response.setName(value.getName());
-            response.setDescription(value.getDescription());
-            response.setPrice(value.getPrice());
-
-            String base64Image = Base64.encodeBase64String(value.getImage().getContent().getData());
-            response.setImage(base64Image);
-            response.setMimeType(value.getImage().getMimeType());
-            return response;
-        }).toList();
-        return results;
+        response = new ProductResponse<>();
+        response.setError(false);
+        response.setResults(repository.findAll());
+        response.setStatus("success");
+        return ResponseEntity.ok().body(response);
 
     }
 
