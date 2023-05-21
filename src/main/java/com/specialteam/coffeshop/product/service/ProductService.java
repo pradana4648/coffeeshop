@@ -14,11 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specialteam.coffeshop.product.dto.ProductDto;
+import com.specialteam.coffeshop.product.dto.ProductRequestDto;
+import com.specialteam.coffeshop.product.dto.ProductResponseDto;
 import com.specialteam.coffeshop.product.model.Product;
 import com.specialteam.coffeshop.product.model.ProductImage;
 import com.specialteam.coffeshop.product.repository.ProductRepository;
-import com.specialteam.coffeshop.product.request.ProductRequest;
-import com.specialteam.coffeshop.product.response.ProductResponse;
 import com.specialteam.coffeshop.util.AppUtils;
 
 @Service
@@ -39,20 +39,20 @@ public class ProductService {
             dto.setFilename(product.getImage().getFilename());
             return dto;
         }).toList();
-        return ProductResponse.response(false, results, HttpStatus.OK);
+        return ProductResponseDto.response(false, results, HttpStatus.OK);
     }
 
     public ResponseEntity<?> addProducts(String productJsonString, MultipartFile imageFile) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            ProductRequest request = mapper.readValue(productJsonString, ProductRequest.class);
+            ProductRequestDto request = mapper.readValue(productJsonString, ProductRequestDto.class);
 
             Optional<Product> productByName = repository.findByName(request.getName());
 
             if (productByName.isPresent()) {
                 var result = new HashMap<>();
                 result.put("message", String.format("product with name %s is exist", request.getName()));
-                return ProductResponse.response(true, result, HttpStatus.OK);
+                return ProductResponseDto.response(true, result, HttpStatus.OK);
             } else {
                 ProductImage image = new ProductImage();
                 Product productEntity = new Product();
@@ -73,7 +73,7 @@ public class ProductService {
                 var result = new HashMap<>();
                 result.put("message", "product successfully added");
 
-                return ProductResponse.response(false, result, HttpStatus.OK);
+                return ProductResponseDto.response(false, result, HttpStatus.OK);
             }
         } catch (Exception e) {
             throw e;
@@ -87,7 +87,7 @@ public class ProductService {
         if (!productById.isPresent()) {
             var result = new HashMap<>();
             result.put("message", String.format("product with id %s not exist", id));
-            return ProductResponse.response(true, result, HttpStatus.OK);
+            return ProductResponseDto.response(true, result, HttpStatus.OK);
         } else {
             var result = new HashMap<>();
             result.put("message", String.format("success update availbility product id %s", id));
@@ -97,7 +97,7 @@ public class ProductService {
 
             repository.save(product);
 
-            return ProductResponse.response(false, result, HttpStatus.OK);
+            return ProductResponseDto.response(false, result, HttpStatus.OK);
         }
 
     }

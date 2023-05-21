@@ -26,4 +26,15 @@ public class ProductControllerAdvice extends ResponseEntityExceptionHandler {
         log.error("EXCEPTION RAISE : {}", ex);
         return super.handleHttpRequestMethodNotSupported(ex, headers, status, request);
     }
+
+    @Override
+    @Nullable
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers,
+            HttpStatusCode statusCode, WebRequest request) {
+        log.error("HEADERS : {}", headers);
+        log.error("HTTP STATUS : {}", statusCode);
+        log.error("HTTP REQUEST : {}", request);
+        log.error("EXCEPTION RAISE : {}", ex);
+        return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    }
 }
