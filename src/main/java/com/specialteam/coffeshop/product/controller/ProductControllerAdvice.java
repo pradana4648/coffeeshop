@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.product.controller.advice;
+package com.specialteam.coffeshop.product.controller;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -8,8 +8,6 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import com.specialteam.coffeshop.product.controller.ProductController;
 
 import lombok.extern.slf4j.Slf4j;
 

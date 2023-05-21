@@ -30,7 +30,6 @@ public class WebSecurityConfig {
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .build();
-
     }
 
     @Bean
