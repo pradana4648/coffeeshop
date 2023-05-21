@@ -2,20 +2,18 @@ package com.specialteam.coffeshop.product.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specialteam.coffeshop.product.dto.ProductDto;
 import com.specialteam.coffeshop.product.dto.ProductRequestDto;
-import com.specialteam.coffeshop.product.dto.ProductResponseDto;
 import com.specialteam.coffeshop.product.model.Product;
 import com.specialteam.coffeshop.product.model.ProductImage;
 import com.specialteam.coffeshop.product.repository.ProductRepository;
@@ -26,7 +24,7 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public ResponseEntity<?> getProducts() {
+    public List<ProductDto> getProducts() {
         List<ProductDto> results = repository.findAll().stream().map(product -> {
             ProductDto dto = new ProductDto();
             dto.setId(product.getId());
@@ -39,10 +37,11 @@ public class ProductService {
             dto.setFilename(product.getImage().getFilename());
             return dto;
         }).toList();
-        return ProductResponseDto.response(false, results, HttpStatus.OK);
+        return results;
     }
 
-    public ResponseEntity<?> addProducts(String productJsonString, MultipartFile imageFile) throws Exception {
+    public Map<String, Object> addProducts(String productJsonString, MultipartFile imageFile) throws Exception {
+        Map<String, Object> result;
         ObjectMapper mapper = new ObjectMapper();
         try {
             ProductRequestDto request = mapper.readValue(productJsonString, ProductRequestDto.class);
@@ -50,9 +49,9 @@ public class ProductService {
             Optional<Product> productByName = repository.findByName(request.getName());
 
             if (productByName.isPresent()) {
-                var result = new HashMap<>();
+                result = new HashMap<>();
                 result.put("message", String.format("product with name %s is exist", request.getName()));
-                return ProductResponseDto.response(true, result, HttpStatus.OK);
+                return result;
             } else {
                 ProductImage image = new ProductImage();
                 Product productEntity = new Product();
@@ -70,10 +69,9 @@ public class ProductService {
 
                 repository.save(productEntity);
 
-                var result = new HashMap<>();
+                result = new HashMap<>();
                 result.put("message", "product successfully added");
-
-                return ProductResponseDto.response(false, result, HttpStatus.OK);
+                return result;
             }
         } catch (Exception e) {
             throw e;
@@ -81,23 +79,25 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<?> editProductAvailbility(String id) {
+    public Map<String, Object> editProductAvailbility(String id) {
+        Map<String, Object> result;
         Optional<Product> productById = repository.findById(id);
 
         if (!productById.isPresent()) {
-            var result = new HashMap<>();
+            result = new HashMap<>();
             result.put("message", String.format("product with id %s not exist", id));
-            return ProductResponseDto.response(true, result, HttpStatus.OK);
+            return result;
         } else {
-            var result = new HashMap<>();
-            result.put("message", String.format("success update availbility product id %s", id));
             Product product = productById.get();
 
             product.setIsAvailable(Boolean.TRUE);
 
             repository.save(product);
 
-            return ProductResponseDto.response(false, result, HttpStatus.OK);
+            result = new HashMap<>();
+            result.put("message", String.format("success update availbility product id %s", id));
+
+            return result;
         }
 
     }
