@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.controller.advice;
+package com.specialteam.coffeshop.product.controller.advice;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.specialteam.coffeshop.controller.ProductController;
+import com.specialteam.coffeshop.product.controller.ProductController;
 
 import lombok.extern.slf4j.Slf4j;
 

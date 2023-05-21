@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.service;
+package com.specialteam.coffeshop.product.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.specialteam.coffeshop.dto.ProductDto;
-import com.specialteam.coffeshop.model.Product;
-import com.specialteam.coffeshop.model.ProductImage;
-import com.specialteam.coffeshop.repository.ProductRepository;
-import com.specialteam.coffeshop.request.ProductRequest;
-import com.specialteam.coffeshop.response.ProductResponse;
-import com.specialteam.coffeshop.util.ProductUtil;
+import com.specialteam.coffeshop.product.dto.ProductDto;
+import com.specialteam.coffeshop.product.model.Product;
+import com.specialteam.coffeshop.product.model.ProductImage;
+import com.specialteam.coffeshop.product.repository.ProductRepository;
+import com.specialteam.coffeshop.product.request.ProductRequest;
+import com.specialteam.coffeshop.product.response.ProductResponse;
+import com.specialteam.coffeshop.util.AppUtils;
 
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    public ResponseEntity<ProductResponse<List<ProductDto>>> getProducts() {
+    public ResponseEntity<?> getProducts() {
         List<ProductDto> results = repository.findAll().stream().map(product -> {
             ProductDto dto = new ProductDto();
             dto.setId(product.getId());
@@ -34,7 +34,7 @@ public class ProductService {
             dto.setDescription(product.getDescription());
             dto.setQuantity(product.getQuantity());
             dto.setPrice(product.getPrice());
-            dto.setImageAsBase64(ProductUtil.productImageAsBase64(product.getImage()));
+            dto.setImageAsBase64(AppUtils.productImageAsBase64(product.getImage()));
             dto.setMimeType(product.getImage().getMimeType());
             dto.setFilename(product.getImage().getFilename());
             return dto;

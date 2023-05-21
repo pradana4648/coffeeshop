@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.model;
+package com.specialteam.coffeshop.product.model;
 
 import org.bson.types.Binary;
 

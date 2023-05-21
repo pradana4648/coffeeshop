@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.controller;
+package com.specialteam.coffeshop.product.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.specialteam.coffeshop.service.ProductService;
+import com.specialteam.coffeshop.product.service.ProductService;
 
 @Controller
 @RequestMapping("/api/v1")

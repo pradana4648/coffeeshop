@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.response;
+package com.specialteam.coffeshop.product.response;
 
 import java.time.Instant;
 

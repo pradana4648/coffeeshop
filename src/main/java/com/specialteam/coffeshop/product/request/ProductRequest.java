@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.request;
+package com.specialteam.coffeshop.product.request;
 
 import lombok.Data;
 

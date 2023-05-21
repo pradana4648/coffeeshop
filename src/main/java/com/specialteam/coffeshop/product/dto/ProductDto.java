@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.dto;
+package com.specialteam.coffeshop.product.dto;
 
 import lombok.Data;
 
@@ -12,5 +12,4 @@ public class ProductDto {
     private String imageAsBase64;
     private String mimeType;
     private String filename;
-
 }
