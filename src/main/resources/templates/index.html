@@ -20,7 +20,7 @@
       <p class="">Check our Products here</p>
     </div>
 
-    <div class="row row-cols-3">
+    <div class="row row-cols-3 g-2">
       <div class="col" th:each="product : ${products}">
         <div class="card">
           <img th:src="${product.imageAsBase64}" th:alt="${product.name}" />
