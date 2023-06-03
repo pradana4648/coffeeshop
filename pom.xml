@@ -81,11 +81,10 @@
 			<version>5.2.3</version>
 		</dependency>
 		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>bootstrap-icons</artifactId>
+			<version>1.10.5</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>

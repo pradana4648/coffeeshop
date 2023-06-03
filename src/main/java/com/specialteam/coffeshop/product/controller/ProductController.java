@@ -8,13 +8,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.specialteam.coffeshop.product.dto.ProductDto;
 import com.specialteam.coffeshop.product.dto.ProductResponseDto;
 import com.specialteam.coffeshop.product.service.ProductService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -40,6 +44,13 @@ public class ProductController {
     @ResponseBody
     public ResponseEntity<?> editProductAvailbility(@PathVariable(name = "product_id") String id) {
         return ProductResponseDto.response(service.editProductAvailbility(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/products/cart", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    public ResponseEntity<?> addProductToCart(HttpServletRequest request, @RequestBody ProductDto body) {
+        return ProductResponseDto.response(service.addProductToCart(request.getUserPrincipal().getName(), body),
+                HttpStatus.OK);
     }
 
 }

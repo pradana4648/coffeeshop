@@ -1,5 +1,6 @@
 package com.specialteam.coffeshop.product.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,18 +15,28 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specialteam.coffeshop.product.dto.ProductDto;
 import com.specialteam.coffeshop.product.dto.ProductRequestDto;
+import com.specialteam.coffeshop.product.model.Cart;
 import com.specialteam.coffeshop.product.model.Product;
 import com.specialteam.coffeshop.product.model.ProductImage;
+import com.specialteam.coffeshop.product.repository.CartRepository;
 import com.specialteam.coffeshop.product.repository.ProductRepository;
+import com.specialteam.coffeshop.user.model.User;
+import com.specialteam.coffeshop.user.repository.UserRepository;
 import com.specialteam.coffeshop.util.AppUtils;
 
 @Service
 public class ProductService {
     @Autowired
-    private ProductRepository repository;
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<ProductDto> getProducts() {
-        List<ProductDto> results = repository.findAll().stream().map(product -> {
+        List<ProductDto> results = productRepository.findAll().stream().map(product -> {
             ProductDto dto = new ProductDto();
             dto.setId(product.getId());
             dto.setName(product.getName());
@@ -46,7 +57,7 @@ public class ProductService {
         try {
             ProductRequestDto request = mapper.readValue(productJsonString, ProductRequestDto.class);
 
-            Optional<Product> productByName = repository.findByName(request.getName());
+            Optional<Product> productByName = productRepository.findByName(request.getName());
 
             if (productByName.isPresent()) {
                 result = new HashMap<>();
@@ -67,7 +78,7 @@ public class ProductService {
                 productEntity.setPrice(request.getPrice());
                 productEntity.setImage(image);
 
-                repository.save(productEntity);
+                productRepository.save(productEntity);
 
                 result = new HashMap<>();
                 result.put("message", "product successfully added");
@@ -81,7 +92,7 @@ public class ProductService {
 
     public Map<String, Object> editProductAvailbility(String id) {
         Map<String, Object> result;
-        Optional<Product> productById = repository.findById(id);
+        Optional<Product> productById = productRepository.findById(id);
 
         if (!productById.isPresent()) {
             result = new HashMap<>();
@@ -92,7 +103,7 @@ public class ProductService {
 
             product.setIsAvailable(Boolean.TRUE);
 
-            repository.save(product);
+            productRepository.save(product);
 
             result = new HashMap<>();
             result.put("message", String.format("success update availbility product id %s", id));
@@ -100,6 +111,42 @@ public class ProductService {
             return result;
         }
 
+    }
+
+    public Map<String, Object> addProductToCart(String username, ProductDto dto) {
+        Map<String, Object> result = new HashMap<>();
+
+        Optional<User> user = userRepository.findByUsername(username);
+        List<Cart> carts = cartRepository.findByUserId(user.get().getUid());
+
+        Cart cartEntity = new Cart();
+        List<Product> products = new ArrayList<>();
+        Product product = new Product();
+
+        product.setQuantity(dto.getQuantity());
+        product.setPrice(dto.getPrice());
+        product.setName(dto.getName());
+
+        products.add(product);
+
+        cartEntity.setUserId(user.get().getUid());
+        cartEntity.setCartId(user.get().getUsername() + "-product");
+        cartEntity.setProducts(products);
+
+        cartRepository.save(cartEntity);
+
+        result.put("message", "success add product");
+        return result;
+    }
+
+    public Integer totalProductInCarts(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            List<Cart> carts = cartRepository.findByUserId(user.get().getUid());
+            return carts.size();
+        } else {
+            return 0;
+        }
     }
 
 }
