@@ -10,12 +10,27 @@
     />
     <title>Special Team Coffeeshop</title>
   </head>
+
   <body class="container">
     <div>
       <a href="/">
         <h1>Special Team Coffeeshop</h1>
       </a>
       <p class="lead">We sell top quality coffee from Java</p>
+      <p class="">Check our Products here</p>
+    </div>
+
+    <div class="row row-cols-3">
+      <div class="col" th:each="product : ${products}">
+        <div class="card">
+          <img th:src="${product.imageAsBase64}" th:alt="${product.name}" />
+          <div class="card-body">
+            <h5 class="card-title" th:text="${product.name}"></h5>
+            <p class="card-text" th:text="${product.description}"></p>
+            <button class="btn btn-primary w-100">Add</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Webjars package -->
