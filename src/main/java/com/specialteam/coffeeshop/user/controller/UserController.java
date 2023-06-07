@@ -1,4 +1,4 @@
-package com.specialteam.coffeshop.user.controller;
+package com.specialteam.coffeeshop.user.controller;
 
 import java.util.Map;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.specialteam.coffeshop.user.service.UserService;
+import com.specialteam.coffeeshop.user.service.UserService;
 
 @RequestMapping("/api/v1/auth")
 @RestController
