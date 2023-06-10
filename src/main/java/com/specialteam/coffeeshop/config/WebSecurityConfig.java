@@ -1,19 +1,28 @@
 package com.specialteam.coffeeshop.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import com.specialteam.coffeeshop.user.service.UserService;
 
 @Configuration
 public class WebSecurityConfig {
+    @Autowired
+    @Qualifier("customAccessDeniedHandler")
+    private AccessDeniedHandler accessDeniedHandler;
+
+    @Autowired
+    @Qualifier("customAuthenticationEntryPoint")
+    private AuthenticationEntryPoint authenticationEntryPoint;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -28,8 +37,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         (request) -> {
                             request.requestMatchers("/api/v1/auth/register").permitAll();
-                            request.requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll();
-                            request.requestMatchers(HttpMethod.POST, "/api/v1/**").hasRole("USER");
+                            request.requestMatchers("/api/v1/auth/check").permitAll();
+                            request.requestMatchers("/api/v1/products/**").hasAuthority("USER");
+
                         })
                 .authorizeHttpRequests()
                 .anyRequest()
@@ -37,6 +47,8 @@ public class WebSecurityConfig {
                 .and()
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
+                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(authenticationEntryPoint))
                 .build();
     }
 
