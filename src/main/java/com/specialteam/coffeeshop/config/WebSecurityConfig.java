@@ -1,6 +1,5 @@
 package com.specialteam.coffeeshop.config;
 
-import com.specialteam.coffeeshop.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,19 +10,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.specialteam.coffeeshop.user.service.UserService;
+
 @Configuration
 public class WebSecurityConfig {
-    public String encode(CharSequence rawPassword) {
-        return passwordEncoder.encode(rawPassword);
-    }
-
-    public boolean matches(CharSequence rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
-    }
-
-    public boolean upgradeEncoding(String encodedPassword) {
-        return passwordEncoder.upgradeEncoding(encodedPassword);
-    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -33,8 +23,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf()
-                .disable()
+        return http.csrf(csrf -> csrf.disable())
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(
                         (request) -> {
