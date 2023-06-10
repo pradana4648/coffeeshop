@@ -29,7 +29,7 @@ public class WebSecurityConfig {
                         (request) -> {
                             request.requestMatchers("/api/v1/auth/register").permitAll();
                             request.requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll();
-                            request.requestMatchers(HttpMethod.POST, "/api/v1/**").hasRole("ROLES_USER");
+                            request.requestMatchers(HttpMethod.POST, "/api/v1/**").hasRole("USER");
                         })
                 .authorizeHttpRequests()
                 .anyRequest()
