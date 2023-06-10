@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
                 return "user already exist";
             }
             List<String> roles = new ArrayList<>();
-            roles.add("ROLES_USER");
+            roles.add("USER");
 
             User user = new User();
             user.setUsername((String) body.get("username"));
@@ -50,6 +50,8 @@ public class UserService implements UserDetailsService {
             user.setPassword(passwordEncoder.encode((String) body.get("password")));
             user.setIsAccountNonExpired(true);
             user.setIsAccountNonLocked(true);
+            user.setIsEnabled(true);
+            user.setIsCredentialsNonExpired(true);
             user.setRoles(roles);
             userRepository.save(user);
             return "success register user";

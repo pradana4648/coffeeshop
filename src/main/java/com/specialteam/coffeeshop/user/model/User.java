@@ -2,12 +2,14 @@ package com.specialteam.coffeeshop.user.model;
 
 import java.util.Collection;
 import java.util.List;
-import lombok.Data;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.Data;
 
 @Document("users")
 @Data
@@ -27,9 +29,13 @@ public class User implements UserDetails {
 
     private Boolean isAccountNonLocked;
 
+    private Boolean isEnabled;
+
+    private Boolean isCredentialsNonExpired;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(role -> new SimpleGrantedAuthority(role)).toList();
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role)).toList();
     }
 
     @Override
@@ -44,11 +50,13 @@ public class User implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return isCredentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
+    
     }
+
 }
