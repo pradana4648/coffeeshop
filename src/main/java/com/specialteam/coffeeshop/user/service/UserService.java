@@ -1,11 +1,13 @@
 package com.specialteam.coffeeshop.user.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +30,11 @@ public class UserService implements UserDetailsService {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isPresent()) {
-            return user.get();
+            User res = user.get();
+            List<SimpleGrantedAuthority> authorities = res.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority(role)).toList();
+            return new org.springframework.security.core.userdetails.User(res.getUsername(), res.getPassword(),
+                    authorities);
         } else {
             throw new UsernameNotFoundException("Username not found");
         }
@@ -59,5 +65,12 @@ public class UserService implements UserDetailsService {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public Map<String, Object> checkUser(Map<String, Object> body) {
+        Map<String, Object> result = new HashMap<>();
+        Optional<User> user = userRepository.findByUsername((String) body.get("username"));
+        result.put("data", user.get().getRoles().stream().map(role -> new SimpleGrantedAuthority(role)).toList());
+        return result;
     }
 }
