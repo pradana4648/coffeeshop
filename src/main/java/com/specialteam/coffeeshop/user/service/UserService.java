@@ -51,7 +51,8 @@ public class UserService implements UserDetailsService {
 
             User user = new User();
             user.setUsername((String) body.get("username"));
-            user.setFullname((String) body.get("fullname"));
+            user.setFirstname((String) body.get("firstname"));
+            user.setLastname((String) body.get("lastname"));
             user.setPassword(passwordEncoder.encode((String) body.get("password")));
             user.setIsAccountNonExpired(true);
             user.setIsAccountNonLocked(true);
