@@ -1,7 +1,6 @@
 package com.specialteam.coffeeshop.user.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -65,12 +64,5 @@ public class UserService implements UserDetailsService {
         } catch (Exception e) {
             throw e;
         }
-    }
-
-    public Map<String, Object> checkUser(Map<String, Object> body) {
-        Map<String, Object> result = new HashMap<>();
-        Optional<User> user = userRepository.findByUsername((String) body.get("username"));
-        result.put("data", user.get().getRoles().stream().map(role -> new SimpleGrantedAuthority(role)).toList());
-        return result;
     }
 }
