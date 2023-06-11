@@ -1,4 +1,4 @@
-package com.specialteam.coffeeshop.user.model;
+package com.specialteam.coffeeshop.user.entity;
 
 import java.util.List;
 
@@ -12,21 +12,15 @@ import lombok.Data;
 public class User {
     @Id
     private String uid;
-
-    private String fullname;
-
+    private String firstname;
+    private String lastname;
     private String username;
-
     private String password;
-
     private List<String> roles;
-
     private Boolean isAccountNonExpired;
-
     private Boolean isAccountNonLocked;
-
     private Boolean isEnabled;
-
     private Boolean isCredentialsNonExpired;
+    private Address userAddress;
 
 }
