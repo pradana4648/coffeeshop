@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.specialteam.coffeeshop.user.model.User;
+import com.specialteam.coffeeshop.user.entity.User;
 import com.specialteam.coffeeshop.user.repository.UserRepository;
 
 @Service
