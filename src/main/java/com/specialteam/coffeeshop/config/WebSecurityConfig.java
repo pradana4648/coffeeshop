@@ -47,8 +47,8 @@ public class WebSecurityConfig {
                 .and()
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
-                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler)
-                        .authenticationEntryPoint(authenticationEntryPoint))
+                // .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler)
+                // .authenticationEntryPoint(authenticationEntryPoint))
                 .build();
     }
 
