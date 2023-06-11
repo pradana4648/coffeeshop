@@ -21,9 +21,4 @@ public class UserController {
     public ResponseEntity<String> registerUser(@RequestBody Map<String, Object> body) throws Exception {
         return ResponseEntity.ok().body(userService.registerUser(body));
     }
-
-    @PostMapping("/check")
-    public ResponseEntity<Map> checkUser(@RequestBody Map<String, Object> body) throws Exception {
-        return ResponseEntity.ok().body(userService.checkUser(body));
-    }
 }
