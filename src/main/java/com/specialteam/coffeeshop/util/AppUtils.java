@@ -1,8 +1,10 @@
 package com.specialteam.coffeeshop.util;
 
-import com.specialteam.coffeeshop.product.model.ProductImage;
 import java.util.Base64;
-import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.specialteam.coffeeshop.product.model.ProductImage;
 
 public class AppUtils {
     public static String productImageAsBase64(ProductImage image) {
@@ -14,8 +16,8 @@ public class AppUtils {
         return builder.toString();
     }
 
-    public static String productIdGenerator(String name) {
-        List<String> values = List.of(name.split(" ")).stream().map(value -> value.substring(0)).toList();
-        return String.join("", values).toUpperCase();
+    public static String concatFullname(String firstname, String lastname) {
+        String format = StringUtils.joinWith(" ", new Object[] { firstname, lastname });
+        return format;
     }
 }

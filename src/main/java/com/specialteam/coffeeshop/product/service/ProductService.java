@@ -1,5 +1,17 @@
 package com.specialteam.coffeeshop.product.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.bson.types.Binary;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.specialteam.coffeeshop.product.dto.ProductDto;
 import com.specialteam.coffeeshop.product.dto.ProductRequestDto;
@@ -8,19 +20,9 @@ import com.specialteam.coffeeshop.product.model.Product;
 import com.specialteam.coffeeshop.product.model.ProductImage;
 import com.specialteam.coffeeshop.product.repository.CartRepository;
 import com.specialteam.coffeeshop.product.repository.ProductRepository;
-import com.specialteam.coffeeshop.user.model.User;
+import com.specialteam.coffeeshop.user.entity.User;
 import com.specialteam.coffeeshop.user.repository.UserRepository;
 import com.specialteam.coffeeshop.util.AppUtils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import org.bson.types.Binary;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProductService {
